@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Define el conjunto de caracteres y la responsividad -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Aprendizaje - EduCode</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Importa los iconos de Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Importa Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Barra lateral con navegación -->
+        <aside class="sidebar">
+            <div class="logo">
+                <!-- Nombre de la plataforma -->
+                <h2>SlyCipher</h2>
+                <img src="Img/Logo.jpeg" alt="Logo SlyCipher" class="logo-image">
+            </div>
+            <nav>
+                <ul>
+                    <!-- Enlaces de navegación para estudiantes -->
+                    <li><span class="material-icons">dashboard</span><a href="#" class="nav-link active"
+                            data-section="student-dashboard">Dashboard</a></li>
+                    <li><span class="material-icons">school</span><a href="#" class="nav-link"
+                            data-section="courses-section">Cursos</a></li>
+                    <li><span class="material-icons">trending_up</span><a href="#" class="nav-link"
+                            data-section="progress-section">Progreso</a></li>
+                    <!-- Menú desplegable para Administrador, oculto para no administradores -->
+                    <li class="dropdown admin-menu" style="display: none;">
+                        <span class="material-icons">admin_panel_settings</span>
+                        <a href="#" class="nav-link dropdown-toggle">Administrador</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="nav-link" data-section="admin-users">Gestionar Usuarios</a></li>
+                            <li><a href="#" class="nav-link" data-section="admin-courses">Gestionar Cursos</a></li>
+                            <li><a href="#" class="nav-link" data-section="admin-stats">Estadísticas</a></li>
+                        </ul>
+                    </li>
+                    <!-- Nueva opción para Creador de Contenido -->
+                    <li><span class="material-icons">edit</span><a href="error500.html" class="nav-link">Creador de
+                            Contenido</a></li>
+                    <li><span class="material-icons">settings</span><a href="error404.html" class="nav-link">Configuración</a></li>
+                    <li><span class="material-icons">logout</span><a href="#" class="nav-link" id="logout-link">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Encabezado con título dinámico y nombre de usuario -->
+            <header class="header">
+                <h1 id="header-title">Bienvenido, Estudiante</h1>
+                <div class="user-info">
+                    <span class="material-icons">account_circle</span>
+                    <span id="user-name">Usuario</span>
+                </div>
+            </header>
+
+            <!-- Dashboard de Estudiante -->
+            <div id="student-dashboard" class="dashboard-section">
+                <!-- Sección de estadísticas -->
+                <section class="stats">
+                    <h2>Estadísticas</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Cursos Completados</h3>
+                            <p id="completed-courses">3</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Horas de Estudio</h3>
+                            <p id="study-hours">45</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Puntos Obtenidos</h3>
+                            <p id="points-earned">1200</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sección de progreso -->
+                <section class="progress">
+                    <h2>Tu Progreso</h2>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="progress-text">Progreso: 60%</p>
+                    <canvas id="progress-chart" width="400" height="200"></canvas>
+                </section>
+            </div>
+
+            <!-- Sección de cursos -->
+            <div id="courses-section" class="dashboard-section" style="display: none;">
+                <section class="courses">
+                    <h2>Cursos Disponibles</h2>
+                    <!-- Botón para error 404 -->
+                    <div class="courses-header">
+                        <button onclick="window.location.href='error404.html'" class="error-404-btn">Explorar Curso
+                            Externo</button>
+                    </div>
+                    <div class="courses-grid" id="courses-grid"></div>
+                </section>
+            </div>
+
+            <!-- Sección de progreso independiente -->
+            <div id="progress-section" class="dashboard-section" style="display: none;">
+                <section class="progress">
+                    <div id="progress-details"></div>
+                </section>
+            </div>
+
+            <!-- Dashboard de Administrador -->
+            <div id="admin-dashboard" class="dashboard-section" style="display: none;">
+                <!-- Mensaje de acceso denegado -->
+                <div id="access-denied" class="access-denied" style="display: none;">
+                    <h2>Acceso Denegado</h2>
+                    <p>No tienes permisos para acceder a esta sección.</p>
+                </div>
+                <!-- Gestión de Usuarios -->
+                <section id="admin-users" class="admin-section" style="display: none;">
+                    <h2>Gestionar Usuarios</h2>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table"></tbody>
+                    </table>
+                </section>
+
+                <!-- Gestión de Cursos -->
+                <section id="admin-courses" class="admin-section" style="display: none;">
+                    <h2>Gestionar Cursos</h2>
+                    <form id="add-course-form">
+                        <label for="course-title">Título del Curso:</label>
+                        <input type="text" id="course-title" required>
+                        <label for="course-description">Descripción:</label>
+                        <textarea id="course-description" required></textarea>
+                        <button type="submit">Agregar Curso</button>
+                    </form>
+                    <h3>Cursos Existentes</h3>
+                    <div id="admin-courses-list" class="courses-grid"></div>
+                </section>
+
+                <!-- Estadísticas de Administrador -->
+                <section id="admin-stats" class="admin-section" style="display: none;">
+                    <h2>Estadísticas Generales</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Usuarios</h3>
+                            <p id="total-users">50</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Cursos Activos</h3>
+                            <p id="active-courses">10</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Lecciones Completadas</h3>
+                            <p id="completed-lessons">1500</p>
+                        </div>
+                    </div>
+                    <canvas id="stats-chart" width="300" height="300"></canvas>
+                    <p id="stats-date" style="text-align: center; color: #7f8c8d; margin-top: 10px;"></p>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
